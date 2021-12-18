@@ -8,4 +8,7 @@ interface CoinPaprikaApi {
     @GET("/v1/coins")
     suspend fun getCoins(): List<CoinDto>
 
+    companion object {
+        const val BASE_URL = "https://api.coinpaprika.com/"
+    }
 }
