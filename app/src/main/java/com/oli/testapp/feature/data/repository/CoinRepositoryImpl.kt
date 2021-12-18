@@ -26,7 +26,7 @@ class CoinRepositoryImpl(
 
         try {
             val coinsFromServer = api.getCoins()
-            dao.deleteCoins(coins = coinsFromServer.map { it.toCoinEntity() })
+            dao.deleteCoins()
             dao.insertCoins(coins = coinsFromServer.map { it.toCoinEntity() })
 
         } catch (e: HttpException) {

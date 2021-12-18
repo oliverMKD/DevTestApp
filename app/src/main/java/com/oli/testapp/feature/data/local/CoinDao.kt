@@ -16,5 +16,5 @@ interface CoinDao {
     suspend fun getCoins(): List<CoinEntity>
 
     @Query("DELETE FROM coinentity")
-    suspend fun deleteCoins(coins: List<CoinEntity>)
+    suspend fun deleteCoins()
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oli.testapp.core.util.Resource
 import com.oli.testapp.feature.domain.use_case.GetCoinsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class CoinListViewModel @Inject constructor(
     private val getCoinsUseCase: GetCoinsUseCase
 ) : ViewModel() {
@@ -22,6 +24,10 @@ class CoinListViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    init {
+        getCoins()
+    }
 
     fun getCoins() = viewModelScope.launch {
         getCoinsUseCase().onEach { result ->
@@ -54,8 +60,8 @@ class CoinListViewModel @Inject constructor(
             }
         }.launchIn(this)
     }
-}
 
-sealed class UIEvent {
-    data class ShowSnackbar(val message: String) : UIEvent()
+    sealed class UIEvent {
+        data class ShowSnackbar(val message: String) : UIEvent()
+    }
 }
