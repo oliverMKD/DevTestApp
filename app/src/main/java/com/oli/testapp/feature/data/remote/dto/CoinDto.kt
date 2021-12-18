@@ -1,6 +1,7 @@
 package com.oli.testapp.feature.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
+import com.oli.testapp.feature.data.local.entity.CoinEntity
 import com.oli.testapp.feature.domain.model.Coin
 
 data class CoinDto(
@@ -17,6 +18,16 @@ data class CoinDto(
 
 fun CoinDto.toCoin(): Coin {
     return Coin(
+        id = id,
+        isActive = isActive,
+        name = name,
+        rank = rank,
+        symbol = symbol
+    )
+}
+
+fun CoinDto.toCoinEntity(): CoinEntity {
+    return CoinEntity(
         id = id,
         isActive = isActive,
         name = name,
