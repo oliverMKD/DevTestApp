@@ -36,7 +36,6 @@ class CoinRepositoryImpl(
                     data = coins
                 )
             )
-
         } catch (e: IOException) {
             emit(
                 Resource.Error(

@@ -2,11 +2,15 @@ package com.oli.testapp.feature.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.work.Configuration
+import com.oli.testapp.core.worker.IoSchedWorkerFactory
 import com.oli.testapp.feature.data.local.CoinDatabase
 import com.oli.testapp.feature.data.remote.CoinPaprikaApi
 import com.oli.testapp.feature.data.repository.CoinRepositoryImpl
 import com.oli.testapp.feature.domain.repository.CoinRepository
 import com.oli.testapp.feature.domain.use_case.GetCoinsUseCase
+import com.oli.testapp.feature.domain.use_case.GetCoinsUseCaseImpl
+import com.oli.testapp.feature.presentation.viewmodel.ViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,6 +57,25 @@ object CoinModule {
     fun provideGetCoinsUseCase(
         repository: CoinRepository
     ): GetCoinsUseCase {
-        return GetCoinsUseCase(repository)
+        return GetCoinsUseCaseImpl(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWorkManagerConfiguration(
+        ioSchedWorkerFactory: IoSchedWorkerFactory
+    ): Configuration {
+        return Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .setWorkerFactory(ioSchedWorkerFactory)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesViewModelFactory(
+        getCoinsUseCase: GetCoinsUseCase
+    ): ViewModelFactory {
+        return ViewModelFactory(getCoinsUseCase = getCoinsUseCase)
     }
 }

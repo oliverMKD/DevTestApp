@@ -1,4 +1,4 @@
-package com.oli.testapp.feature.presentation
+package com.oli.testapp.feature.presentation.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -6,15 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oli.testapp.core.util.Resource
 import com.oli.testapp.feature.domain.use_case.GetCoinsUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.oli.testapp.feature.presentation.CoinState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class CoinListViewModel @Inject constructor(
     private val getCoinsUseCase: GetCoinsUseCase
 ) : ViewModel() {
@@ -30,7 +28,7 @@ class CoinListViewModel @Inject constructor(
     }
 
     fun getCoins() = viewModelScope.launch {
-        getCoinsUseCase().onEach { result ->
+        getCoinsUseCase.getCoins().collectLatest { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
@@ -58,7 +56,7 @@ class CoinListViewModel @Inject constructor(
                     )
                 }
             }
-        }.launchIn(this)
+        }
     }
 
     sealed class UIEvent {

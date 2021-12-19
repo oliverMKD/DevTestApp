@@ -6,7 +6,7 @@ import com.oli.testapp.feature.domain.model.Coin
 
 @Entity
 data class CoinEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val dBId: Int? = null,
     val id: String?,
     val isActive: Boolean,
